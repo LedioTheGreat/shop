@@ -134,8 +134,8 @@ const $$ = selector => document.querySelectorAll(selector);
 const sliderStates = new Map();
 let cookieAccepted = false;
 
-// Use placeholder in same folder as other files
-const PLACEHOLDER_IMAGE = './car-placeholder-default.jpg';
+// Use online placeholder service to avoid 404 errors
+const PLACEHOLDER_IMAGE = 'https://via.placeholder.com/400x300/cccccc/666666?text=Car+Image';
 
 const elements = {
     mobileMenuBtn: $('mobileMenuBtn'),
@@ -180,7 +180,7 @@ function createCarCard(car) {
     const img = car.images?.[0] || PLACEHOLDER_IMAGE;
     return `<div class="car-card" data-car-id="${car.id}">
         <div class="car-image">
-            <img src="${img}" alt="${car.year} ${car.make} ${car.model}">
+            <img src="${img}" alt="${car.year} ${car.make} ${car.model}" onerror="this.src='${PLACEHOLDER_IMAGE}'">
             <div class="car-badge">${car.badge}</div>
         </div>
         <div class="car-info">
@@ -221,7 +221,7 @@ function createModalContent(car) {
     const features = car.features.map(f => `<li><i class="fas fa-check"></i> ${f}</li>`).join('');
     const images = car.images?.length ? car.images : [PLACEHOLDER_IMAGE];
     const thumbnails = images.map((img, i) => 
-        `<img src="${img}" alt="${car.year} ${car.make} ${car.model} - Image ${i + 1}" class="thumbnail ${i === 0 ? 'active' : ''}" data-index="${i}" onclick="changeSlide(${car.id}, ${i})">`
+        `<img src="${img}" alt="${car.year} ${car.make} ${car.model} - Image ${i + 1}" class="thumbnail ${i === 0 ? 'active' : ''}" data-index="${i}" onclick="changeSlide(${car.id}, ${i})" onerror="this.src='${PLACEHOLDER_IMAGE}'">`
     ).join('');
     
     return `<span class="close">&times;</span>
@@ -229,7 +229,7 @@ function createModalContent(car) {
             <div class="car-modal-image">
                 <div class="slider-container">
                     <div class="main-image">
-                        <img src="${images[0]}" alt="${car.year} ${car.make} ${car.model}" id="mainImage-${car.id}">
+                        <img src="${images[0]}" alt="${car.year} ${car.make} ${car.model}" id="mainImage-${car.id}" onerror="this.src='${PLACEHOLDER_IMAGE}'">
                     </div>
                     ${images.length > 1 ? `
                         <button class="slider-arrow left" onclick="prevSlide(${car.id})"><i class="fas fa-chevron-left"></i></button>
@@ -316,6 +316,7 @@ function updateSlider(carId) {
     
     if (mainImage) {
         mainImage.src = state.images[state.currentIndex];
+        mainImage.onerror = () => mainImage.src = PLACEHOLDER_IMAGE;
     }
     
     thumbnails.forEach((thumb, i) => thumb.classList.toggle('active', i === state.currentIndex));
