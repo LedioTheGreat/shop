@@ -8,7 +8,7 @@ const carsData = [
     monthlyPayment: 229,
     mileage: 28000,
     fuel: "Petrol",
-    transmission: "Manual",
+    transmission: "Automatic",
     doors: 4,
     badge: "Great Value",
     images: ["Bmw1.jpeg", "Bmw2.jpeg", "Bmw3.jpeg", "Bmw4.jpeg", "Bmw5.jpeg", "Bmw6.jpeg", "Bmw7.jpeg"],
