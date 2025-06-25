@@ -75,7 +75,7 @@ const carsData = [
     transmission: "Automatic",
     doors: 4,
     badge: "Luxury",
-    images: ["suv.jpeg", "suv1.jpeg", "suv2.jpeg", "suv3.jpeg", "suv4.jpeg", "suv5.jpeg"],
+    images: ["Suv.jpeg", "suv1.jpeg", "suv2.jpeg", "suv3.jpeg", "suv4.jpeg", "suv5.jpeg"],
     features: ["Premium Leather Interior", "Command Navigation", "Harman Kardon Sound", "Panoramic Sunroof", "Memory Seats", "Automatic Lights", "Rain Sensors", "All-Wheel Drive"],
     description: "A stylish and versatile Honda CR-V with premium luxury features. This sophisticated SUV offers exceptional comfort and all-wheel-drive capability."
     },
