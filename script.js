@@ -27,7 +27,7 @@ const carsData = [
     transmission: "Manual",
     doors: 4,
     badge: "Great Value",
-    images: ["B1.jpeg","B2.jpeg", "B4.jpeg", "B5.jpeg", "B6.jpeg", "B7.jpeg", "B8.jpeg"],
+    images: ["B1.jpeg","b3.jpeg","B2.jpeg", "B4.jpeg", "B5.jpeg", "B6.jpeg", "B7.jpeg", "B8.jpeg"],
     features: [
   "Air Conditioning", "Bluetooth Audio", "USB Connectivity", "Electric Mirrors",
   "Power Steering", "ABS Brakes", "Airbags", "Remote Central Locking",
