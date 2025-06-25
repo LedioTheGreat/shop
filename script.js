@@ -134,9 +134,6 @@ const $$ = selector => document.querySelectorAll(selector);
 const sliderStates = new Map();
 let cookieAccepted = false;
 
-// Use online placeholder service to avoid 404 errors
-const PLACEHOLDER_IMAGE = 'https://via.placeholder.com/400x300/cccccc/666666?text=Car+Image';
-
 const elements = {
     mobileMenuBtn: $('mobileMenuBtn'),
     navMenu: $('navMenu'),
@@ -177,10 +174,12 @@ function loadCars() {
 }
 
 function createCarCard(car) {
-    const img = car.images?.[0] || PLACEHOLDER_IMAGE;
+    const img = car.images?.[0];
+    const imageElement = img ? `<img src="${img}" alt="${car.year} ${car.make} ${car.model}" style="display: none;" onload="this.style.display='block';" onerror="this.parentElement.innerHTML='<div class=&quot;no-image&quot;>Image not available</div>';">` : '<div class="no-image">Image not available</div>';
+    
     return `<div class="car-card" data-car-id="${car.id}">
         <div class="car-image">
-            <img src="${img}" alt="${car.year} ${car.make} ${car.model}" onerror="this.src='${PLACEHOLDER_IMAGE}'">
+            ${imageElement}
             <div class="car-badge">${car.badge}</div>
         </div>
         <div class="car-info">
@@ -219,24 +218,34 @@ function openCarModal(carId) {
 
 function createModalContent(car) {
     const features = car.features.map(f => `<li><i class="fas fa-check"></i> ${f}</li>`).join('');
-    const images = car.images?.length ? car.images : [PLACEHOLDER_IMAGE];
-    const thumbnails = images.map((img, i) => 
-        `<img src="${img}" alt="${car.year} ${car.make} ${car.model} - Image ${i + 1}" class="thumbnail ${i === 0 ? 'active' : ''}" data-index="${i}" onclick="changeSlide(${car.id}, ${i})" onerror="this.src='${PLACEHOLDER_IMAGE}'">`
-    ).join('');
+    const images = car.images?.length ? car.images : [];
+    
+    let imageContent = '';
+    if (images.length > 0) {
+        const thumbnails = images.map((img, i) => 
+            `<img src="${img}" alt="${car.year} ${car.make} ${car.model} - Image ${i + 1}" class="thumbnail ${i === 0 ? 'active' : ''}" data-index="${i}" onclick="changeSlide(${car.id}, ${i})" style="display: none;" onload="this.style.display='inline-block';" onerror="this.style.display='none';">`
+        ).join('');
+        
+        imageContent = `
+            <div class="slider-container">
+                <div class="main-image">
+                    <img src="${images[0]}" alt="${car.year} ${car.make} ${car.model}" id="mainImage-${car.id}" style="display: none;" onload="this.style.display='block';" onerror="this.parentElement.innerHTML='<div class=&quot;no-image-large&quot;>Image not available</div>';">
+                </div>
+                ${images.length > 1 ? `
+                    <button class="slider-arrow left" onclick="prevSlide(${car.id})"><i class="fas fa-chevron-left"></i></button>
+                    <button class="slider-arrow right" onclick="nextSlide(${car.id})"><i class="fas fa-chevron-right"></i></button>
+                ` : ''}
+                <div class="thumbnails">${thumbnails}</div>
+            </div>
+        `;
+    } else {
+        imageContent = '<div class="no-image-large">Images not available</div>';
+    }
     
     return `<span class="close">&times;</span>
         <div class="car-modal-grid">
             <div class="car-modal-image">
-                <div class="slider-container">
-                    <div class="main-image">
-                        <img src="${images[0]}" alt="${car.year} ${car.make} ${car.model}" id="mainImage-${car.id}" onerror="this.src='${PLACEHOLDER_IMAGE}'">
-                    </div>
-                    ${images.length > 1 ? `
-                        <button class="slider-arrow left" onclick="prevSlide(${car.id})"><i class="fas fa-chevron-left"></i></button>
-                        <button class="slider-arrow right" onclick="nextSlide(${car.id})"><i class="fas fa-chevron-right"></i></button>
-                    ` : ''}
-                    <div class="thumbnails">${thumbnails}</div>
-                </div>
+                ${imageContent}
             </div>
             <div class="car-modal-info">
                 <h2>${car.year} ${car.make} ${car.model}</h2>
@@ -316,7 +325,9 @@ function updateSlider(carId) {
     
     if (mainImage) {
         mainImage.src = state.images[state.currentIndex];
-        mainImage.onerror = () => mainImage.src = PLACEHOLDER_IMAGE;
+        mainImage.style.display = 'none';
+        mainImage.onload = () => mainImage.style.display = 'block';
+        mainImage.onerror = () => mainImage.parentElement.innerHTML = '<div class="no-image-large">Image not available</div>';
     }
     
     thumbnails.forEach((thumb, i) => thumb.classList.toggle('active', i === state.currentIndex));
