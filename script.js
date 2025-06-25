@@ -27,7 +27,7 @@ const carsData = [
     transmission: "Manual",
     doors: 4,
     badge: "Great Value",
-    images: ["B1.jpeg", "B2.jpeg", "B3.jpeg", "B4.jpeg", "B5.jpeg", "B6.jpeg", "B7.jpeg", "B8.jpeg"],
+    images: ["B1.jpeg", "B3.jpeg", "B4.jpeg", "B5.jpeg", "B6.jpeg", "B7.jpeg", "B8.jpeg"],
     features: ["Air Conditioning", "Bluetooth Audio", "USB Connectivity", "Electric Mirrors", "Power Steering", "ABS Brakes", "Airbags", "Remote Central Locking", "Cruise Control", "LED Daytime Running Lights"],
     description: "A luxurious and reliable Mercedes-Benz A-Class in excellent condition. Ideal for those seeking a premium compact car with advanced features and great handling."
     },
