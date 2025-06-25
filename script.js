@@ -7,7 +7,7 @@ const carsData = [
     price: 7250,
     monthlyPayment: 229,
     mileage: 28000,
-    fuel: "Petrol",
+    fuel: "Gasoline",
     transmission: "Automatic",
     doors: 4,
     badge: "Great Value",
