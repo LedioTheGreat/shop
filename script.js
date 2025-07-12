@@ -403,38 +403,58 @@ function closeMobileMenu() {
 
 function initContactForm() {
     if (!elements.contactForm) return;
+
     elements.contactForm.addEventListener('submit', e => {
-        e.preventDefault();
-        
+        e.preventDefault(); // stop form from auto-submitting
+
         const inputs = {
-            name: elements.contactForm.querySelector('input[name="name"]')?.value,
-            email: elements.contactForm.querySelector('input[name="email"]')?.value,
-            phone: elements.contactForm.querySelector('input[name="phone"]')?.value,
-            message: elements.contactForm.querySelector('textarea[name="message"]')?.value
+            name: elements.contactForm.querySelector('input[name="name"]')?.value.trim(),
+            email: elements.contactForm.querySelector('input[name="email"]')?.value.trim(),
+            phone: elements.contactForm.querySelector('input[name="phone"]')?.value.trim(),
+            message: elements.contactForm.querySelector('textarea[name="message"]')?.value.trim()
         };
-        
-        if (!inputs.name?.trim() || !inputs.email?.trim() || !inputs.message?.trim()) {
+
+        // Basic required field validation
+        if (!inputs.name || !inputs.email || !inputs.message) {
             return alert('Please fill in all required fields.');
         }
-        
+
+        // Email format check
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inputs.email)) {
             return alert('Please enter a valid email address.');
         }
-        
+
         const submitBtn = elements.contactForm.querySelector('button[type="submit"]');
         const originalText = submitBtn.textContent;
-        
+
         submitBtn.innerHTML = '<span class="loading"></span> Sending...';
         submitBtn.disabled = true;
-        
-        setTimeout(() => {
-            alert(`Thank you ${inputs.name}! Your message has been sent successfully. We'll get back to you within 24 hours.`);
-            elements.contactForm.reset();
+
+        // Send data to Formspree
+        fetch(elements.contactForm.action, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(inputs)
+        })
+        .then(response => {
+            if (response.ok) {
+                alert(`Thank you ${inputs.name}! Your message has been sent successfully.`);
+                elements.contactForm.reset();
+            } else {
+                alert('Something went wrong. Please try again later.');
+            }
+        })
+        .catch(() => alert('Network error. Please check your connection.'))
+        .finally(() => {
             submitBtn.textContent = originalText;
             submitBtn.disabled = false;
-        }, 2000);
+        });
     });
 }
+
 
 function initCookieNotice() {
     if (!elements.cookieNotice || cookieAccepted) return;
