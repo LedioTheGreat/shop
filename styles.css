@@ -1160,3 +1160,10 @@ body {
         --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
     }
 }
+
+.btn-small {
+    flex: 0 0 auto; /* prevent it from stretching */
+    padding: 0.6rem 1.2rem;
+    font-size: 0.875rem;
+    min-height: 40px; /* smaller height for hero buttons */
+}
