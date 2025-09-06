@@ -459,3 +459,34 @@ window.closeCarModal = closeCarModal;
 window.acceptCookies = acceptCookies;
 window.showPrivacyPolicy = showPrivacyPolicy;
 window.showTerms = showTerms;
+
+
+function bookCarWash() {
+    // Optionally, you can use prompt() to ask the user, or use static text
+    const message = "I want to book a car wash on [DATE] at [TIME]"; // You can customize this
+
+    // Store the message in sessionStorage (so it persists through navigation/scroll)
+    sessionStorage.setItem('carWashBookingMessage', message);
+
+    // Scroll to the contact section
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+        contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Optionally, immediately fill the form if it's already on the page
+    setTimeout(() => {
+        const messageField = document.querySelector('#contactForm textarea[name="message"]');
+        if (messageField) {
+            messageField.value = message;
+            messageField.focus();
+
+            // OPTIONAL: To auto-submit, uncomment the next 2 lines:
+            // const form = document.getElementById('contactForm');
+            // if (form) form.submit();
+        }
+    }, 800); // delay to ensure scroll is finished
+}
+
+// Expose for inline handler
+window.bookCarWash = bookCarWash;
